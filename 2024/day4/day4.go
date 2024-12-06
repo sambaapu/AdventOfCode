@@ -8,7 +8,7 @@ import (
 )
 
 func loadData() [][]string {
-	file, err := os.Open("./day4/input.txt")
+	file, err := os.Open("./input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,6 +65,7 @@ func dfs(charMatrix [][]string, r int, c int, dir string, curr string) int {
 	}
 	return 0
 }
+
 func part1(charMatrix [][]string) {
 	ROW := len(charMatrix)
 	COL := len(charMatrix[0])
@@ -83,11 +84,56 @@ func part1(charMatrix [][]string) {
 			}
 		}
 	}
-	fmt.Println(res)
+	fmt.Println("Part1 result: ", res)
+}
 
+func part2(charMatrix [][]string) {
+	ROW := len(charMatrix)
+	COL := len(charMatrix[0])
+	res := 0
+	for i := 0; i < ROW; i++ {
+		for j := 0; j < COL; j++ {
+			/*
+				M . M
+				. A .
+				S . S
+				======
+				S . M
+				. A .
+				S . M
+				======
+				S . S
+				. A .
+				M . M
+				======
+				M . S
+				. A .
+				M . S
+			*/
+			if charMatrix[i][j] == "A" {
+				if i-1 >= 0 && j-1 >= 0 && i+1 < ROW && j+1 < COL {
+					if charMatrix[i-1][j-1] == "M" && charMatrix[i-1][j+1] == "M" &&
+						charMatrix[i+1][j-1] == "S" && charMatrix[i+1][j+1] == "S" {
+						res++
+					} else if charMatrix[i-1][j-1] == "M" && charMatrix[i-1][j+1] == "S" &&
+						charMatrix[i+1][j-1] == "M" && charMatrix[i+1][j+1] == "S" {
+						res++
+					} else if charMatrix[i-1][j-1] == "S" && charMatrix[i-1][j+1] == "S" &&
+						charMatrix[i+1][j-1] == "M" && charMatrix[i+1][j+1] == "M" {
+						res++
+					} else if charMatrix[i-1][j-1] == "S" && charMatrix[i-1][j+1] == "M" &&
+						charMatrix[i+1][j-1] == "S" && charMatrix[i+1][j+1] == "M" {
+						res++
+					}
+				}
+			}
+		}
+	}
+	fmt.Println("Part2 result: ", res)
 }
 
 func main() {
 	charMatrix := loadData()
 	part1(charMatrix)
+	part2(charMatrix)
 }
