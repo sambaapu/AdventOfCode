@@ -100,6 +100,7 @@ func getHarmonicAntinodes(posMap map[int][]coordinate) map[coordinate]bool {
 	antinodes := make(map[coordinate]bool)
 	for _, v := range posMap {
 		for i := 0; i < len(v); i++ {
+			antinodes[v[i]] = true // add the node itself
 			for j := i + 1; j < len(v); j++ {
 				xdiff := myAbs(v[i].x - v[j].x)
 				ydiff := myAbs(v[i].y - v[j].y)
@@ -108,16 +109,30 @@ func getHarmonicAntinodes(posMap map[int][]coordinate) map[coordinate]bool {
 				if (myMin(v[i].x, v[j].x) == v[i].x && myMin(v[i].y, v[j].y) == v[i].y) ||
 					(myMin(v[i].x, v[j].x) == v[j].x && myMin(v[i].y, v[j].y) == v[j].y) {
 					a1 = coordinate{myMin(v[i].x, v[j].x) - xdiff, myMin(v[i].y, v[j].y) - ydiff}
+					for inBound(a1) {
+						antinodes[a1] = true
+						a1.x -= xdiff
+						a1.y -= ydiff
+					}
 					a2 = coordinate{myMax(v[i].x, v[j].x) + xdiff, myMax(v[i].y, v[j].y) + ydiff}
+					for inBound(a2) {
+						antinodes[a2] = true
+						a2.x += xdiff
+						a2.y += ydiff
+					}
 				} else {
 					a1 = coordinate{myMin(v[i].x, v[j].x) - xdiff, myMax(v[i].y, v[j].y) + ydiff}
+					for inBound(a1) {
+						antinodes[a1] = true
+						a1.x -= xdiff
+						a1.y += ydiff
+					}
 					a2 = coordinate{myMax(v[i].x, v[j].x) + xdiff, myMin(v[i].y, v[j].y) - ydiff}
-				}
-				if inBound(a1) {
-					antinodes[a1] = true
-				}
-				if inBound(a2) {
-					antinodes[a2] = true
+					for inBound(a2) {
+						antinodes[a2] = true
+						a2.x += xdiff
+						a2.y -= ydiff
+					}
 				}
 			}
 
@@ -132,5 +147,7 @@ func main() {
 	Y = len(data[0])
 	posMap := getPosMap(data)
 	antinodes := getAntinodes(posMap)
+	harmonicAntinodes := getHarmonicAntinodes(posMap)
 	fmt.Println(len(antinodes))
+	fmt.Println(len(harmonicAntinodes))
 }
