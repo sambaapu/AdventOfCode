@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"time"
 )
 
 type Point struct {
@@ -12,7 +13,8 @@ type Point struct {
 }
 
 func loadData() [][]string {
-	file, err := os.Open("input.txt")
+	args := os.Args
+	file, err := os.Open(args[1])
 	if err != nil {
 		fmt.Println("Error reading file")
 	}
@@ -61,16 +63,18 @@ func main() {
 	data := loadData()
 	visited := make(map[Point]bool)
 	res := 0
+	t := time.Now()
 	for i := 0; i < len(data); i++ {
 		for j := 0; j < len(data[0]); j++ {
 			if !visited[Point{i, j}] {
 				perimeter := 0
 				area := dfs(i, j, &data, data[i][j], &visited, &perimeter)
-				fmt.Println("letter:", data[i][j], "area: ", area, "perimeter: ", perimeter)
+				//fmt.Println("letter:", data[i][j], "area: ", area, "perimeter: ", perimeter)
 				res += area * perimeter
 			}
 		}
 	}
+	fmt.Println(time.Since(t))
 	fmt.Println(res)
 
 }
