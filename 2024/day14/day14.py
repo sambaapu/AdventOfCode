@@ -69,6 +69,13 @@ def part2(steps=100):
         for row in grid:
             images.append(''.join(row))
             images.extend("\n")
+        found = False 
+        for imRow in images:
+            if "#########" in imRow:
+                found = True
+                break
+        if found:
+            break
     Path(__file__, "..", "output.txt").resolve().write_text("\n".join(images))
 part1()
 part2(10000)
