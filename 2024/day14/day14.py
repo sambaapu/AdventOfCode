@@ -76,6 +76,8 @@ def part2(steps=100):
                 break
         if found:
             break
+        else:
+            images = []
     Path(__file__, "..", "output.txt").resolve().write_text("\n".join(images))
 part1()
 part2(10000)
