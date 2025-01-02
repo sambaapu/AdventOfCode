@@ -48,9 +48,20 @@ class Grid:
                 while (new_row, new_col) != (self.robot_row, self.robot_col):
                     new_row, new_col = self.get_old_pos(new_row, new_col, dir)
                     r, c = self.get_new_pos(new_row, new_col, dir)
-                    self.update_pixel(new_row, new_col, r, c)
+                    self.update_pixel(r, c, new_row, new_col)
                 r, c = self.get_new_pos(self.robot_row, self.robot_col, dir)
                 self.update_robot_pos(r, c)
+    def get_gps_number(self, r , c):
+        return (r*100) + c
+    
+    def sum_gps_number(self):
+        res = 0
+        for i in range(len(self.grid)):
+            for j in range(len(self.grid[i])):
+                if self.grid[i][j] == 'O':
+                    res += self.get_gps_number(i, j)
+        return res
+
     
     def get_new_pos(self, row, col, dir):
         if dir == '^':
@@ -80,9 +91,10 @@ class Grid:
     def print_dirs(self):
         print(self.dirs)
 
-g = Grid('input1.txt')
+g = Grid('./2024/day15/input.txt')
 g.print_grid()
 print("")
-g.dirs = '^^'
+#g.dirs = '<<'
 g.update()
+print(g.sum_gps_number())
 g.print_grid()
